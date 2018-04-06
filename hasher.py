@@ -1,22 +1,20 @@
-import os, hashlib, variables
+import os, hashlib
 
 BUF_SIZE = 65536
 
 def hasher(file):
 	
-	fileshare = variables.fileshare
-	md5 = hashlib.md5()
+	#fileshare = variables.fileshare
 	
 	try:
 		hash = hashlib.md5()
-		with open('%s%s' % (fileshare, file), 'rb') as f:
-			while True:
-				data = f.read(BUF_SIZE)
-				if not data:
-					break
-				result = md5.update(data)
-			return result
+		with open('%s' % (file), 'rb') as f:
+			#while True:
+			for block in iter(lambda: f.read(BUF_SIZE), b""):
+				hash.update(block)
+		return hash.hexdigest()
 	except Exception, e:
 		print e
 		pass
+
 	
